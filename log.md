@@ -9,4 +9,4 @@
 ## 29-10
 
 * Finished Section 2
-* Made some notes from what I learned can be found [here](notes/svg.md)
+* Made some notes from what I learned can be found [here](notes/SVG.md)
