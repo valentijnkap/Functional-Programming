@@ -1,0 +1,179 @@
+# D3 Scales and setups
+
+## D3 basic setups
+
+With the D3 library, there are a lot of patterns when making charts. For instance, the setups are very similar. First, you load the data. Then you refer to the chart code. But you define the chart by selecting a div or a similar wrapper. Within that wrapper, you create an SVG and build on top of that with chaining methods.
+
+```javascript
+// Loading the data
+d3.json('data.json').then(function(data){
+  generate(data)
+})
+
+// Initialize the callback function that creates the chart
+function generate(data) {
+
+  // Set width and height
+  const chartWidth = 500,
+        chartHeight = 400;
+
+  // Defining the svg for the chart.
+  const svg = d3.select('#chart')
+    .append('svg')
+    .attr('width', chartWidth)
+    .attr('height', chartHeight)
+  
+  // Creating the data points
+  svg.select('rect')
+    .data(data)
+    .enter()
+    .append('rect')
+    .attr('attribute', 'its value')
+    ...
+}
+```
+
+## Scales and domains
+
+Data can be varied and sometimes you don't know how dense it is. When you plot the data points it can happen that the data will be rendered outside the chart. To solve that problem you have to make calculations. But that can be extremely hard. I'm not so good at math so that would become a problem. With `.scales()` and `.domain()` you set the boundaries of the chart. With the `.range()` you proportionately scale the data back to the boundaries of the chart.
+
+```javascript
+// Create boundries
+var chart_width     =   800;
+var chart_height    =   400;
+var padding         =   50;
+
+// Create Scales
+var Xscale = d3.scaleLinear()
+  // This function is also called the accessor function.
+  .domain([0, d3.max(data, function(d){
+    // The 'd' stand for the array number. And the 'd[0]' value stands for the first value in the array
+    return d[0]
+  })])
+  // By adding the padding to the range, makes the boundaries of the container smaller.
+  // That will make sure that the circles will not be of the SVG element.
+  .range([padding, chart_width - padding * 2]);
+
+var Yscale = d3.scaleLinear()
+  .domain([0, d3.max(data, function(d){
+    return d[1]
+  })])
+  .range([padding, chart_height - padding]);
+
+var Rscale = d3.scaleLinear()
+  .domain([0, d3.max(data, function(d) {
+    return d[1];
+  })])
+  .range([5,30]);
+```
+
+## Linear Scale options
+
+There are some functions available that you can use to make the data more applicable to the chart. Below there are some examples Illustrated.
+
+### .nice()
+
+```javascript
+d3.scaleLinear()
+  .domain([0.4344, 0.0912])
+  .range([0, 100])
+  .nice(); // Domain turns into 0.4 and 0.1. It will return 1 number after the comma.
+```
+
+### .rangeRound()
+
+```javascript
+var scale = d.scaleLinear()
+  .domain([0, 10])
+  // Use this instead of range()
+  .rangeRound([0, 100])
+
+// with the .rangeRound() function the decimal values will be rounded
+scale(5); // Retruns 50
+scale(4.55) // returns 45
+```
+
+### .clamp()
+
+```javascript
+var scale = d.scaleLinear()
+  .domain([5, 10])
+  .range([50, 100])
+  // Will make the given numbers fit into the range.
+  .clamp(true)
+
+scale(6); // Retruns 60
+scale(3) // returns 50
+```
+
+### Time parsing
+
+Charts can sometimes be based on time. D3 has functions out of the box to parse the data to computer understandable values.
+
+```javascript
+var data = [
+  {date: '07/01/2017', num: 20},
+  {date: '07/02/2017', num: 37},
+  {date: '07/03/2017', num: 25},
+  {date: '07/04/2017', num: 45},
+  {date: '07/05/2017', num: 23},
+  {date: '07/06/2017', num: 33},
+  {date: '07/07/2017', num: 49},
+  {date: '07/08/2017', num: 40},
+  {date: '07/09/2017', num: 36},
+  {date: '07/10/2017', num: 27},
+];
+
+// Parsing the date and make it reusable by storing it a variable
+var time_parse = d3.timeParse('%m/%d/%Y');
+
+// Formatting the time for later use. This will make the time readable for users. That's the difference between .timeParse()
+var time_format = d3.timeFormat('%b %e');
+
+// Loop trough the data for each date and parse it with the time_parse() function
+data.forEach(function(e, i) {
+  data[i].date = time_parse(e.date);  
+});
+```
+
+## Axis
+
+Data by itself can sometimes be hard to understand for users. Especially when there are no labels. D3 will help you with that by defining Axis and labels.
+
+```javascript
+var chart_width     =   800;
+var padding         =   50;
+
+var x_scale =   d3.scaleLinear()
+  .domain([0, d3.max(data, function(d){
+      return d[0];
+  })])
+  .range([ padding, chart_width - padding * 2 ]);
+
+// The axisBottom() function wil make a label based on the x_scale and display a bottom axis
+var x_axis          = d3.axisBottom(x_scale);
+svg.append('g')
+  .attr('class', 'x-axis')
+  .attr(
+    'transform',
+    'translate(0,' + (chart_height-padding) + ')'
+  )
+  // By calling the x_axis
+  .call(x_axis);
+```
+
+### Ticks
+
+You can set the number of ticks to the labels that had been generated by D3. Therefore you can use the `.tick()` function. Setting a tick value does not mean that it will be displayed. D3 will see this as a suggestion. If d3 thinks that the suggested tick is better it will be displayed.
+
+```javascript
+var x_axis          = d3.axisBottom(x_scale)
+  // Setting ticks
+  .ticks(5)
+  // Passing a array
+  .tickValues([150, 250, 600, 700])
+  //  Reformat the ticks text.
+  .tickFormat(function(d){
+      return d + '%'
+  })
+```
