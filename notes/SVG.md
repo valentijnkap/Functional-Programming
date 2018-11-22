@@ -77,7 +77,7 @@ In SVG it is also possible to write text with the `<text>` element. But to make 
 </text>
 ```
 
-## defs
+## Defs
 
 To create a ‘template’ in SVG you can use the `<defs>` tag. It wil define a certain element that is not directly visibly but can be used later on.
 
@@ -88,4 +88,19 @@ To create a ‘template’ in SVG you can use the `<defs>` tag. It wil define a 
     <circle r="50" cx="200" cy="200"></circle>
   </clipPath>
 </defs>
+```
+
+## Clip Paths
+
+Whith clip paths you can make mask like you do in Photoshop or Illustrator. Here's how it works
+
+```svg
+<clipPath id="custom_clip_path">
+  <rect x="250" y="250" width="200" height="200"></rect>
+</clipPath>
+
+<g id="path-content" clip-path="url(#custom_clip_path)">
+  <circle r="50" cx="200" cy="200"></circle>
+  <circle r="50" cx="210" cy="100"></circle>
+</g>
 ```

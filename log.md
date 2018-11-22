@@ -25,3 +25,18 @@
 
 * Finished seciton 4.
 * Wrote [notes](notes/d3-scales.md) about scales and axis.
+
+## 18-11
+
+* Started section 5 and followed the course until 5.
+* Wrote some notes as well. That will follow later..
+
+## 21-11
+
+* Followed course till 7.
+* Added new notes.
+
+## 22-11
+
+* Finished section 5.
+* Finished all the [notes](notes/animations-interactivity.md) about interactivity and animations.
