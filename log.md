@@ -40,3 +40,8 @@
 
 * Finished section 5.
 * Finished all the [notes](notes/animations-interactivity.md) about interactivity and animations.
+
+## 23-11
+
+* Finished section 6
+* Wrote [notes](notes/layouts-paths-shapes.md) about different layouts and shapes.
