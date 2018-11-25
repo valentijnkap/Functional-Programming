@@ -45,3 +45,10 @@
 
 * Finished section 6
 * Wrote [notes](notes/layouts-paths-shapes.md) about different layouts and shapes.
+
+## 25-11
+
+* Watched the bonus section on how to use D3 with node.js.
+* Made some [notes](notes/node-and-d3.md) about D3 with node.js.
+* Started section 7 and played with maps.
+* Created some [notes](notes/maps.md) from that section so far.
