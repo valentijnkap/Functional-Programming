@@ -52,3 +52,10 @@
 * Made some [notes](notes/node-and-d3.md) about D3 with node.js.
 * Started section 7 and played with maps.
 * Created some [notes](notes/maps.md) from that section so far.
+
+## 26-11
+
+* searched for [data](https://opendata.cbs.nl/statline/#/CBS/nl/dataset/82452NED/table?ts=1543228096687) to plot at [CBS](https://opendata.cbs.nl/#/CBS/nl/).
+* Sketched a visualization to see what I could make
+* Started to clean the data from CBS.
+* Created a static visualization from the first set of the data
