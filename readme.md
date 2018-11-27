@@ -8,6 +8,7 @@
   * [Making choices](#making-choices)
   * [Data](#data)
   * [The chart code](the-chart-code)
+  * [Cleaner code](#cleaner-code)
 * [Features](#features)
 * [Recourses](#recourses)
 
@@ -130,6 +131,10 @@ createLine(utrecht, "utrecht-line", "yellow")
 
 I did the same with the dots on the chart and reused the method when updating the chart.
 
+### Cleaner code
+
+To make my work a bit cleaner and consistent I used [Prettier](https://prettier.io/). There are many options for making your work cleaner but I wanted to try Prettier and see if this is working for me.
+
 ## Features
 
 * `d3.select()`
@@ -138,9 +143,11 @@ I did the same with the dots on the chart and reused the method when updating th
 * `d3.line()`
 * `d3.timeParse()`
 * `d3.timeFormat()`
-* `d3.csv`
+* `d3.csv()`
 * `d3.scaleTime()`
 * `d3.scaleLinear()`
+* `d3.scaleOrdinal()`
+* `d3.schemeCategory10`
 * `d3.axisBottom()`
 * `d3.axisLeft()`
 
@@ -150,7 +157,7 @@ I did the same with the dots on the chart and reused the method when updating th
 * [Learn d3js for data visualization](https://www.udemy.com/learn-d3js-for-data-visualization/)
 * [Setting Up D3.js with Babel and Webpack](https://dev.to/willamesoares/setting-up-d3js-with-babel-and-webpack-dc3)
 * [Repo boiler template](https://github.com/willamesoares/learn-d3)
-* [Helped me solve converstion](https://stackoverflow.com/questions/24473733/importing-a-csv-into-d3-cant-convert-strings-to-numbers)
+* [Helped me solve conversion](https://stackoverflow.com/questions/24473733/importing-a-csv-into-d3-cant-convert-strings-to-numbers)
 * [Data table](https://opendata.cbs.nl/statline/#/CBS/nl/dataset/82452NED/table?ts=1543228096687)
 
 ### License
