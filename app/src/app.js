@@ -9,7 +9,7 @@ const padding = 80
 const timeParse = d3.timeParse("%Y %m")
 const timeFormat = d3.timeFormat("%B")
 
-// Mapping the months
+// Mapping the months into numbers
 const map = {
   "januari": "01",
   'februari': '02',
