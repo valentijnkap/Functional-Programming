@@ -10,9 +10,9 @@ body {
   svg {
     background: #F2F2F2;
   }
+}
 
-  button {
-    margin: 0 auto;
-    width: 150px;
-  }
+button {
+  display: block;
+  margin: 5px auto;
 }
