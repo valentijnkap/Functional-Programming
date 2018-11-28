@@ -150,6 +150,7 @@ To make my work a bit cleaner and consistent I used [Prettier](https://prettier.
 * `d3.schemeCategory10`
 * `d3.axisBottom()`
 * `d3.axisLeft()`
+* `d3.map()`
 
 ## Recourses
 
@@ -159,6 +160,7 @@ To make my work a bit cleaner and consistent I used [Prettier](https://prettier.
 * [Repo boiler template](https://github.com/willamesoares/learn-d3)
 * [Helped me solve conversion](https://stackoverflow.com/questions/24473733/importing-a-csv-into-d3-cant-convert-strings-to-numbers)
 * [Data table](https://opendata.cbs.nl/statline/#/CBS/nl/dataset/82452NED/table?ts=1543228096687)
+* [Mapping trough the cities](https://stackoverflow.com/questions/28572015/how-to-select-unique-values-in-d3-js-from-data)
 
 ### License
 

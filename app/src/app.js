@@ -3,7 +3,7 @@ import * as d3 from "d3";
 // Set the size of the chart
 const width = 1000;
 const height = 600;
-const padding = 80;
+const padding = 60;
 
 // Time parsing
 const timeParse = d3.timeParse("%Y %m");
@@ -12,21 +12,11 @@ const timeFormat = d3.timeFormat("%B");
 // color scaling
 const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-// Mapping the months into numbers
-const map = {
-  januari: "01",
-  februari: "02",
-  maart: "03",
-  april: "04",
-  mei: "05",
-  juni: "06",
-  juli: "07",
-  augustus: "08",
-  september: "09",
-  oktober: "10",
-  november: "11",
-  december: "12"
-};
+// Creating tooltip
+const tooltip = d3
+  .select("#root")
+  .append("div")
+  .attr("class", "tooltip")
 
 // Creating svg
 const svg = d3
@@ -35,9 +25,35 @@ const svg = d3
   .attr("width", width)
   .attr("height", height);
 
+// Active mode for buttons
+d3.select("#amount")
+  .attr("class", "active")
+  .classed("active", true)
+
+d3.select("#price")
+  .attr("class", "active")
+  .classed("active", false)
+
 // Loading external data
 d3.csv("data/data.csv")
   .row(function(data) {
+
+    // Mapping the months into numbers
+    const map = {
+      januari: "01",
+      februari: "02",
+      maart: "03",
+      april: "04",
+      mei: "05",
+      juni: "06",
+      juli: "07",
+      augustus: "08",
+      september: "09",
+      oktober: "10",
+      november: "11",
+      december: "12"
+    };
+
     const periods = data.perioden;
     const monthSelection = periods.substring(5, periods.length);
     const newMonthValue = map[monthSelection];
@@ -71,6 +87,24 @@ function renderChart(err, dataset) {
       return d.regio === "Utrecht (gemeente)";
     });
 
+    // Create the lagend
+    const legendValues = d3.map(dataset, (d) => {
+      return d.regio
+    }).keys()
+
+    // Append the legend labels
+    d3.select("ul#legend")
+      .selectAll("li")
+      .data(legendValues)
+      .enter()
+      .append("li")
+      .attr("style", (d, i) => {
+        return "background:" + color(i) + ";"
+      })
+      .text((d) => {
+        return d
+      })
+
     // Seting up scales
     const xScale = d3
       .scaleTime()
@@ -82,7 +116,7 @@ function renderChart(err, dataset) {
           return d.perioden;
         })
       ])
-      .range([padding, width - padding]);
+      .range([50, width - padding]);
 
     const yScale = d3
       .scaleLinear()
@@ -112,8 +146,18 @@ function renderChart(err, dataset) {
     svg
       .append("g")
       .attr("class", "y-axis")
-      .attr("transform", "translate(" + padding + ",0)")
+      .attr("transform", "translate(" + 50 + ",0)")
       .call(yAxis);
+    
+    // Create title
+    svg
+      .append("text")
+      .attr("class", "heading-text")
+      .attr("y", "40px")
+      .attr("x", width / 2)
+      .attr("text-anchor", "middle")
+      .attr("style", "font-family: 'Noto Sans TC', sans-serif;")
+      .text("Aantal te koop staande woningen (2016)")
 
     // Create Line
     const line = d3
@@ -144,6 +188,7 @@ function renderChart(err, dataset) {
         .data(data)
         .enter()
         .append("circle")
+        .attr("class", "dot")
         .attr("r", "5px")
         .attr("cx", d => {
           return xScale(d.perioden);
@@ -153,7 +198,15 @@ function renderChart(err, dataset) {
         })
         .attr("fill", color)
         .attr("stroke-width", 1)
-        .attr("stroke", "white");
+        .attr("stroke", "white")
+        .on("mouseover", (d) => {
+          tooltip.text("Aantal: " + d.aantal).style("display", "block")
+          .style("left", d3.event.pageX - 270 + "px")
+          .style("top", d3.event.pageY - 200 + "px")
+        })
+        .on("mouseout", (d) => {
+          tooltip.text(" ").style("display", "none")
+        });
     }
 
     // Visualization for data: amsterdam
@@ -172,9 +225,18 @@ function renderChart(err, dataset) {
     createLine(utrecht, "utrecht-line", color(3));
     createDots(utrecht, "utrecht-dots", color(3));
 
-    d3.select(".price").on("click", changeToPrice);
+    d3.select("#price").on("click", changeToPrice);
 
     function changeToPrice() {
+      // Active mode for buttons
+      d3.select("#amount")
+        .attr("class", "active")
+        .classed("active", false)
+
+      d3.select("#price")
+        .attr("class", "active")
+        .classed("active", true)
+
       // Change scales
       const yScale = d3
         .scaleLinear()
@@ -191,11 +253,15 @@ function renderChart(err, dataset) {
       // Update axis
       svg
         .select(".y-axis")
-        .transition()
-        .duration(900)
-        .attr("transform", "translate(" + padding + ",0)")
+        .attr("transform", "translate(" + 50 + ",0)")
         .call(yAxis);
-
+      
+      // Update title
+      d3
+        .select("text.heading-text")
+        .text("Gemiddelde verkoopprijs (2016)")
+      
+      // Initiate new line
       const linePrice = d3
         .line()
         .x(d => {
@@ -226,6 +292,13 @@ function renderChart(err, dataset) {
           });
       }
 
+      d3.selectAll("circle")
+        .on("mouseover", (d) => {
+          tooltip.text("Vraagprijs: €" + d.vraagprijs).style("display", "block")
+            .style("left", d3.event.pageX - 285 + "px")
+            .style("top", d3.event.pageY - 200 + "px")
+        })
+
       // Update data amsterdam
       updateLine(amsterdam, "path.amsterdam-line");
       updateDots(amsterdam, "g.amsterdam-dots");
@@ -243,9 +316,18 @@ function renderChart(err, dataset) {
       updateDots(utrecht, "g.utrecht-dots");
     }
 
-    d3.select(".amount").on("click", changetoAmount);
+    d3.select("#amount").on("click", changetoAmount);
 
     function changetoAmount() {
+      // Active mode for buttons
+      d3.select("#amount")
+        .attr("class", "active")
+        .classed("active", true)
+
+      d3.select("#price")
+        .attr("class", "active")
+        .classed("active", false)
+
       // Change scales
       const yScale = d3
         .scaleLinear()
@@ -262,10 +344,13 @@ function renderChart(err, dataset) {
       // Update axis
       svg
         .select(".y-axis")
-        .transition()
-        .duration(900)
-        .attr("transform", "translate(" + padding + ",0)")
+        .attr("transform", "translate(" + 50 + ",0)")
         .call(yAxis);
+      
+      // Update title
+      d3
+        .select("text.heading-text")
+        .text("Aantal te koop staande woningen (2016)")
 
       const linePrice = d3
         .line()
@@ -296,6 +381,13 @@ function renderChart(err, dataset) {
             return yScale(d.aantal);
           });
       }
+
+      d3.selectAll("circle")
+        .on("mouseover", d => {
+          tooltip.text("Aantal: " + d.aantal).style("display", "block")
+          .style("left", d3.event.pageX - 270 + "px")
+          .style("top", d3.event.pageY - 200 + "px")
+        })
 
       // Update data amsterdam
       updateLine(amsterdam, "path.amsterdam-line");
