@@ -4,13 +4,22 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualisatie</title>
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Open+Sans" rel="stylesheet">
     <link href="/dist/main.bundle.css" rel="stylesheet">
   </head>
   <body>
-    <div id="root"></div>
-    <hr>
-    <button class="amount">Aantal woningen</button>
-    <button class="price">Vraagprijs</button>
+    <main>
+      <section>
+        <nav>
+          <div>
+            <button id="amount">Aantal woningen</button>
+            <button id="price">Vraagprijs</button>
+          </div>
+          <ul id="legend"></ul>
+        </nav>
+        <div id="root"></div>
+     </section>
+    </main>
     <script type="text/javascript" src="/dist/app.bundle.js"></script>
   </body>
 </html>
