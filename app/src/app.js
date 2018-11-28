@@ -16,7 +16,7 @@ const color = d3.scaleOrdinal(d3.schemeCategory10);
 const tooltip = d3
   .select("#root")
   .append("div")
-  .attr("class", "tooltip")
+  .attr("class", "tooltip");
 
 // Creating svg
 const svg = d3
@@ -28,16 +28,15 @@ const svg = d3
 // Active mode for buttons
 d3.select("#amount")
   .attr("class", "active")
-  .classed("active", true)
+  .classed("active", true);
 
 d3.select("#price")
   .attr("class", "active")
-  .classed("active", false)
+  .classed("active", false);
 
 // Loading external data
 d3.csv("data/data.csv")
   .row(function(data) {
-
     // Mapping the months into numbers
     const map = {
       januari: "01",
@@ -88,9 +87,11 @@ function renderChart(err, dataset) {
     });
 
     // Create the lagend
-    const legendValues = d3.map(dataset, (d) => {
-      return d.regio
-    }).keys()
+    const legendValues = d3
+      .map(dataset, d => {
+        return d.regio;
+      })
+      .keys();
 
     // Append the legend labels
     d3.select("ul#legend")
@@ -99,11 +100,11 @@ function renderChart(err, dataset) {
       .enter()
       .append("li")
       .attr("style", (d, i) => {
-        return "background:" + color(i) + ";"
+        return "background:" + color(i) + ";";
       })
-      .text((d) => {
-        return d
-      })
+      .text(d => {
+        return d;
+      });
 
     // Seting up scales
     const xScale = d3
@@ -148,7 +149,7 @@ function renderChart(err, dataset) {
       .attr("class", "y-axis")
       .attr("transform", "translate(" + 50 + ",0)")
       .call(yAxis);
-    
+
     // Create title
     svg
       .append("text")
@@ -157,7 +158,7 @@ function renderChart(err, dataset) {
       .attr("x", width / 2)
       .attr("text-anchor", "middle")
       .attr("style", "font-family: 'Noto Sans TC', sans-serif;")
-      .text("Aantal te koop staande woningen (2016)")
+      .text("Aantal te koop staande woningen (2016)");
 
     // Create Line
     const line = d3
@@ -199,13 +200,18 @@ function renderChart(err, dataset) {
         .attr("fill", color)
         .attr("stroke-width", 1)
         .attr("stroke", "white")
-        .on("mouseover", (d) => {
-          tooltip.text("Aantal: " + d.aantal).style("display", "block")
-          .style("left", d3.event.pageX - 270 + "px")
-          .style("top", d3.event.pageY - 200 + "px")
+        .on("mouseover", d => {
+          tooltip
+            .text("Aantal: " + d.aantal)
+            .style("display", "block");
         })
-        .on("mouseout", (d) => {
-          tooltip.text(" ").style("display", "none")
+        .on("mousemove", d =>  {
+          tooltip
+          .style("left", (d3.event.pageX - 50) + "px")
+          .style("top", (d3.event.pageY - 50) + "px");
+        })
+        .on("mouseout", d => {
+          tooltip.text(" ").style("display", "none");
         });
     }
 
@@ -231,11 +237,11 @@ function renderChart(err, dataset) {
       // Active mode for buttons
       d3.select("#amount")
         .attr("class", "active")
-        .classed("active", false)
+        .classed("active", false);
 
       d3.select("#price")
         .attr("class", "active")
-        .classed("active", true)
+        .classed("active", true);
 
       // Change scales
       const yScale = d3
@@ -255,12 +261,10 @@ function renderChart(err, dataset) {
         .select(".y-axis")
         .attr("transform", "translate(" + 50 + ",0)")
         .call(yAxis);
-      
+
       // Update title
-      d3
-        .select("text.heading-text")
-        .text("Gemiddelde verkoopprijs (2016)")
-      
+      d3.select("text.heading-text").text("Gemiddelde verkoopprijs (2016)");
+
       // Initiate new line
       const linePrice = d3
         .line()
@@ -293,11 +297,11 @@ function renderChart(err, dataset) {
       }
 
       d3.selectAll("circle")
-        .on("mouseover", (d) => {
-          tooltip.text("Vraagprijs: €" + d.vraagprijs).style("display", "block")
-            .style("left", d3.event.pageX - 285 + "px")
-            .style("top", d3.event.pageY - 200 + "px")
-        })
+        .on("mouseover", d => {
+          tooltip
+            .text("Vraagprijs: €" + d.vraagprijs)
+            .style("display", "block")
+        });
 
       // Update data amsterdam
       updateLine(amsterdam, "path.amsterdam-line");
@@ -322,11 +326,11 @@ function renderChart(err, dataset) {
       // Active mode for buttons
       d3.select("#amount")
         .attr("class", "active")
-        .classed("active", true)
+        .classed("active", true);
 
       d3.select("#price")
         .attr("class", "active")
-        .classed("active", false)
+        .classed("active", false);
 
       // Change scales
       const yScale = d3
@@ -346,11 +350,11 @@ function renderChart(err, dataset) {
         .select(".y-axis")
         .attr("transform", "translate(" + 50 + ",0)")
         .call(yAxis);
-      
+
       // Update title
-      d3
-        .select("text.heading-text")
-        .text("Aantal te koop staande woningen (2016)")
+      d3.select("text.heading-text").text(
+        "Aantal te koop staande woningen (2016)"
+      );
 
       const linePrice = d3
         .line()
@@ -382,12 +386,13 @@ function renderChart(err, dataset) {
           });
       }
 
-      d3.selectAll("circle")
-        .on("mouseover", d => {
-          tooltip.text("Aantal: " + d.aantal).style("display", "block")
+      d3.selectAll("circle").on("mouseover", d => {
+        tooltip
+          .text("Aantal: " + d.aantal)
+          .style("display", "block")
           .style("left", d3.event.pageX - 270 + "px")
-          .style("top", d3.event.pageY - 200 + "px")
-        })
+          .style("top", d3.event.pageY - 200 + "px");
+      });
 
       // Update data amsterdam
       updateLine(amsterdam, "path.amsterdam-line");

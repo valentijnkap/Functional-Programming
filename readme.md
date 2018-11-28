@@ -161,6 +161,7 @@ To make my work a bit cleaner and consistent I used [Prettier](https://prettier.
 * [Helped me solve conversion](https://stackoverflow.com/questions/24473733/importing-a-csv-into-d3-cant-convert-strings-to-numbers)
 * [Data table](https://opendata.cbs.nl/statline/#/CBS/nl/dataset/82452NED/table?ts=1543228096687)
 * [Mapping trough the cities](https://stackoverflow.com/questions/28572015/how-to-select-unique-values-in-d3-js-from-data)
+* [Making the tooltip position above the mouse](https://bl.ocks.org/mbostock/1087001)
 
 ### License
 
