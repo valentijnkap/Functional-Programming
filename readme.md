@@ -1,5 +1,7 @@
 # Functional Programming course
 
+![Preview](preview.png)
+
 ## Table of Contents
 
 * [Short notice](#short-notice)
@@ -28,7 +30,7 @@ A requirement for this assessment is that I used NPM for this project. D3 is a f
 
 ### Data
 
-Another requirement was that I used external data. I paid a visit to the website of [Centraal Bureau voor de statistiek](https://www.cbs.nl/) and searched for interesting data that I could use. After a while, I found [data](https://opendata.cbs.nl/statline/#/CBS/nl/dataset/82452NED/table?ts=1543228096687) about the housing market in the Netherlands in the year 2016. The data involved houses that were for sale in 4 of the largest cities in the Netherlands. My chart is based on the number of houses that are for sale in each city and how much the average costs are. The data file that I used can be found [here](app/data/data.csv).
+Another requirement was that I used external data. I paid a visit to the website of [Centraal Bureau voor de statistiek](https://www.cbs.nl/) and searched for interesting data that I could use. After a while, I found [data](http://statline.cbs.nl/Statweb/publication/?DM=SLNL&PA=82452NED) about the housing market in the Netherlands in the year 2016. The data involved houses that were for sale in 4 of the largest cities in the Netherlands. My chart is based on the number of houses that are for sale in each city and how much the average costs are. The data file that I used can be found [here](app/data/data.csv).
 
 ### Cleaning the data
 
@@ -104,7 +106,7 @@ function renderChart (err, dataset) {
 
 ### The chart code
 
-By following the course on Udemy I learned a lot about the basics of D3. I used that knowledge to create the axes, the scales, and the lines and circles. I typed a long the course progressed so I could use that code. Although it wasn't copy and paste. I had to change the scales and the attributes in order to make it work for my visualization. But after a while, my `app.js` became really long. It wasn't fun to work with. You know what they say. don't repeat yourself. And that was what I was doing. I refactored the code so I could shrink the number of lines in the file. Here's what I did:
+By following the course on Udemy I learned a lot about the basics of D3. I used that knowledge to create the axes, the scales, and the lines and circles. I typed a long the course as it progressed so I could use that code. Although it wasn't copy and paste. I had to change the scales and the attributes in order to make it work for my visualization. But after a while, my `app.js` became really long. It wasn't fun to work with. You know what they say. don't repeat yourself. And that was what I was doing. I refactored the code so I could shrink the number of lines in the file. Here's what I did:
 
 I created a function that I could use for all the cities but with different data.
 
@@ -120,7 +122,7 @@ function createLine(data, className, color) {
 }
 ```
 
-And called those function 4 times with the right data:
+And called the function 4 times with the correct data:
 
 ```javascript
 createLine(amsterdam, "amsterdam-line", "green")
@@ -129,7 +131,104 @@ createLine(denhaag, "denhaag-line", "blue")
 createLine(utrecht, "utrecht-line", "yellow")
 ```
 
-I did the same with the dots on the chart and reused the method when updating the chart.
+I did the same with the dots on the chart and reused this method when updating the chart based on click events.
+
+To add some interactivity to the chart I added buttons that would trigger different data types. To show the user which dataset he's looking at, I also created an active state with d3. In de Udemy course I learned about the `.classed()` function. That helped me to succeed in this part. Let me demonstrate how that worked out:
+
+```javascript
+// Set a initial state for both the buttons to show the user which dataset is active.
+d3.select("#amount")
+  .attr("class", "active")
+  .classed("active", true);
+
+d3.select("#price")
+  .attr("class", "active")
+  .classed("active", false);
+
+// Trigger a update function for the data based on a click event.
+d3.select("#price").on("click", changeToPrice);
+
+function changeToPrice() {
+  // Change the state of the buttons.
+  d3.select("#amount")
+    .attr("class", "active")
+    .classed("active", false);
+
+  d3.select("#price")
+    .attr("class", "active")
+    .classed("active", true);
+
+  // Here you place the rest of the code that has been changed.
+}
+```
+
+It was also a good idea if I gave the chart a title so users would see what the data is about. Based on the active dataset I changed the title. This is how it works:
+
+```javascript
+// Create the title in the chart.
+svg
+  .append("text")
+  .attr("class", "heading-text")
+  .attr("y", "40px")
+  .attr("x", width / 2)
+  .attr("text-anchor", "middle")
+  .attr("style", "font-family: 'Noto Sans TC', sans-serif;")
+  .text("Aantal te koop staande woningen (2016)");
+
+...
+
+function changeToPrice() {
+  // Update the title with the new text.
+  d3.select("text.heading-text").text("Gemiddelde verkoopprijs (2016)");
+}
+```
+
+I also figured out that hardcoding in D3 is bad practice in some situations. I used 4 lines that needed different colors, but doing that hardcoded was good for testing, but not an end result. In the Udemy course they mentioned the `d3.scaleOrdinal()` that has been used for colors many times. Together with a set of scheme colors from D3 I created an array of colors:
+
+```javascript
+// Set the color scaling.
+// Use the d3.schemeCategory10 color scheme.
+const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+// Used the color() functions to return the colors from the array.
+.attr("fill", (d, i) => {
+  return color(i);
+})
+```
+
+To see which color belongs to which city I needed a legend. Without that the user wouldn't recognize where the data is about. First I wanted to hardcode it. But then I thought, naaah this should be rendered by D3. But there was a problem. I needed a way to find all the unique values based on the key d.regio. Luckily I found a solution (surprisingly) on [StackOverflow](https://stackoverflow.com/questions/28572015/how-to-select-unique-values-in-d3-js-from-data). I could use the d3.map().keys() function to get these unique values.
+
+```javascript
+// Get the unique values from the dataset.
+const legendValues = d3
+  .map(dataset, d => {
+    return d.regio;
+  })
+  // Use .keys() to get the actual key values instead of the object.
+  .keys();
+
+// Loop trough the legendValues array and put the values in a list item.
+d3.select("ul#legend")
+  .selectAll("li")
+  .data(legendValues)
+  .enter()
+  .append("li")
+  .attr("style", (d, i) => {
+    return "background:" + color(i) + ";";
+  })
+  .text(d => {
+    return d;
+  });
+```
+
+My last addition to chart was tooltips. I wanted to show more detailed information about the data on the chart because it was hard to read. Even with the dots on the lines. I created a `div` and rendered the data as text. That was the easiest part. The hardest part was positioning the tooltip. But I got some inspiration from an example from [Mike Bostock](https://bl.ocks.org/mbostock/1087001) to solve this problem. He used the `d3.event.pageX` and `d3.event.pageY` functions to position the tooltip above the mouse. That was my solution and created this:
+
+```javascript
+.on("mousemove", d =>  {
+  tooltip
+    .style("left", (d3.event.pageX - 50) + "px")
+    .style("top", (d3.event.pageY - 50) + "px");
+```
 
 ### Cleaner code
 
@@ -151,6 +250,7 @@ To make my work a bit cleaner and consistent I used [Prettier](https://prettier.
 * `d3.axisBottom()`
 * `d3.axisLeft()`
 * `d3.map()`
+* `d3.event`
 
 ## Recourses
 

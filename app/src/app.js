@@ -86,7 +86,7 @@ function renderChart(err, dataset) {
       return d.regio === "Utrecht (gemeente)";
     });
 
-    // Create the lagend
+    // Create the legend
     const legendValues = d3
       .map(dataset, d => {
         return d.regio;
@@ -212,7 +212,7 @@ function renderChart(err, dataset) {
         })
         .on("mouseout", d => {
           tooltip.text(" ").style("display", "none");
-        });
+        })
     }
 
     // Visualization for data: amsterdam

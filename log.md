@@ -29,7 +29,7 @@
 ## 18-11
 
 * Started section 5 and followed the course until 5.
-* Wrote some notes as well. That will follow later..
+* Wrote some notes as well. That will follow later...
 
 ## 21-11
 
@@ -43,7 +43,7 @@
 
 ## 23-11
 
-* Finished section 6
+* Finished section 6.
 * Wrote [notes](notes/layouts-paths-shapes.md) about different layouts and shapes.
 
 ## 25-11
@@ -56,6 +56,18 @@
 ## 26-11
 
 * searched for [data](https://opendata.cbs.nl/statline/#/CBS/nl/dataset/82452NED/table?ts=1543228096687) to plot at [CBS](https://opendata.cbs.nl/#/CBS/nl/).
-* Sketched a visualization to see what I could make
+* Sketched a visualization to see what I could make.
 * Started to clean the data from CBS.
-* Created a static visualization from the first set of the data
+* Created a static visualization from the first set of the data.
+
+## 27-11
+
+* Plotted all the data on the chart.
+* Made the chart interactive and added buttons to distinct between datasets.
+* Added CSS styles to make the chart more appealing.
+
+## 28-11
+
+* Added tooltips for extra functionality.
+* Added a legend for readability of the data.
+* Updated the readme.
